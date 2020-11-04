@@ -1,0 +1,10 @@
+table.tt{border:1px solid black ; border-collapse:collapse;font-size:12pt}
+table.tt td{border:1px solid black;width:2.5em;text-align:center}
+table.tt tr:nth-child(odd)  td:nth-child(1) {background-color:#EEAA88;}
+table.tt tr:nth-child(odd)  td{background-color:#C8C8E8;}
+table.tt tr:nth-child(even) td:nth-child(1) {background-color:#FFBB88;}
+table.tt tr:nth-child(even) td{background-color:#E8E8FF;}
+table.tt th{border:1px solid black;width:2.5em;text-align:center;
+            background-color:#FFBB88}
+
+// http://k-hiura.cocolog-nifty.com/blog/2013/08/htmltablejs-520.html
