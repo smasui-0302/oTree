@@ -23,6 +23,11 @@ class Introduction(Page):
 class ResultsWaitPage1(WaitPage):
     after_all_players_arrive = 'data_update'
 
+class Chatroom(Page):
+    timeout_seconds = 60
+
+class ResultsWaitPage2(WaitPage):
+    after_all_players_arrive = 'data_update'
 
 
 class Exploit1(Page):
@@ -94,7 +99,7 @@ class Exploit2(Page):
 
 
 
-class ResultsWaitPage2(WaitPage):
+class ResultsWaitPage3(WaitPage):
     after_all_players_arrive = 'resource_update'
 
 
@@ -234,9 +239,12 @@ class GameOver2(Page):
 page_sequence = [
     Introduction,
     ResultsWaitPage1,
-    Exploit1,
-    Exploit2,
+    Chatroom,
     ResultsWaitPage2,
+    Exploit1,
+    ResultsWaitPage3,
+    Exploit2,
+    ResultsWaitPage3,
     GameOver1,
     GameOver2
 ]

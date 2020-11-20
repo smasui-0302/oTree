@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Chatroom<br>
+    Player {{player.id_in_group}}
+{% endblock %}
+
+
+
+{% block content %}
+
+    ここではプレーヤー同士でコミュニケーションをとることができます。
+
+    プレーヤー同士で資源再生について協力するのかどうかを相談してください。
+
+    {% chat %}
+
+    {% next_button %}
+
+{% endblock %}
+
