@@ -23,12 +23,6 @@ class Introduction(Page):
 class ResultsWaitPage1(WaitPage):
     after_all_players_arrive = 'data_update'
 
-class Chatroom(Page):
-    timeout_seconds = 60
-
-class ResultsWaitPage2(WaitPage):
-    after_all_players_arrive = 'data_update'
-
 
 class Exploit1(Page):
     form_model = 'player'
@@ -42,19 +36,26 @@ class Exploit1(Page):
         return dict(
             name_in_url = name_in_url,
             pool_start = self.session.config['pool_start'],
+            nickname=self.player.chat_nickname(),
         )
 
+    timeout_seconds = 180
+"""
+class Chatroom(Page): #チャットルームの定義
+    def vars_for_template(self):
+        return dict(
+            nickname=self.player.chat_nickname()
+        )
+    timeout_seconds = 180
+"""
 
-
-class Exploit2(Page):
-
+"""
+class Output1(Page):
     form_model = 'player'
     form_fields = ['exploitation']
 
-    timeout_seconds = 60
-
     def is_displayed(self):
-        return self.round_number != 1
+        return self.round_number == 2
 
     def vars_for_template(self):
 
@@ -63,11 +64,65 @@ class Exploit2(Page):
             common_pool = self.group.in_round(self.round_number - 1).current_pool,
         )
 
+    def js_vars(self):  # Result クラスの同名の関数とは微妙に違うので注意
+        ## 配列の作成に必要な定数をローカルに作成
+        num_rounds = self.round_number  # 現在のラウンド数
+        players = self.group.get_players()  # すべてのプレイヤーのリスト
+        # num_players = Constants.players_per_group   # プレイヤーの人数
+
+        ## resource を出力する List を作成（形式は List_exploitation と同じ）
+        List_resource = []
+        for p in players:  # リストに含まれるプレイヤーについて
+            id = p.id_in_group  # id を取得
+            pname = 'Player' + str(id)  # プレイヤー名の文字列
+            pdata = []  # データ格納用のリスト
+            for j in range(num_rounds - 1):  # 1ラウンド目から直前のラウンドまでについて
+                pdata.append(p.in_round(j + 1).resource)  # pdata リストに値を追加
+            pdict = {'name': pname, 'data': pdata}  # プレイヤー毎のリストを作成
+            List_resource.append(pdict)
+
+        ## current_pool を出力する List を作成（形式は total_exploitation と同じ）
+        pname = 'current_pool'  # プレイヤー名の文字列
+        pdata = []  # データ格納用のリスト
+        #        pdata.append(self.session.config['pool_start'])
+        for j in range(num_rounds - 1):  # 1ラウンド目から直前のラウンドまでについて
+            pdata.append(self.group.in_round(j + 1).current_pool)  # pdata リストに値を追加
+        List_current_pool = [{'name': pname, 'data': pdata}]  # プレイヤー毎のリストを作成
+
+        print('List_resource is', List_resource)  # デバッグ用
+        print('List_current_pool is', List_current_pool)  # デバッグ用
+
+        return dict(
+            num_rounds=self.session.config['num_rounds'],
+            List_resource=List_resource,
+            List_current_pool=List_current_pool,
+        )
+"""
+
+
+class Exploit2(Page):
+
+    form_model = 'player'
+    form_fields = ['exploitation']
+
+    timeout_seconds = 180
+
+    def is_displayed(self):
+        return self.round_number != 1
+
+    def vars_for_template(self):
+
+        return dict(
+            round_number = self.round_number,
+            pool_start=self.session.config['pool_start'],
+            nickname=self.player.chat_nickname(),
+        )
+
     def js_vars(self): # Result クラスの同名の関数とは微妙に違うので注意
         ## 配列の作成に必要な定数をローカルに作成
         num_rounds = self.round_number              # 現在のラウンド数
         players = self.group.get_players()          # すべてのプレイヤーのリスト
-        # num_players = Constants.players_per_group   # プレイヤーの人数
+        #num_players = Constants.players_per_group   # プレイヤーの人数
 
         ## resource を出力する List を作成（形式は List_exploitation と同じ）
         List_resource = []
@@ -97,9 +152,56 @@ class Exploit2(Page):
         List_current_pool=List_current_pool,
         )
 
+"""
+class Output2(Page):
+    form_model = 'player'
+    form_fields = ['exploitation']
 
+    def is_displayed(self):
+        return self.round_number != 1
 
-class ResultsWaitPage3(WaitPage):
+    def vars_for_template(self):
+
+        return dict(
+            round_number=self.round_number,
+            common_pool=self.group.in_round(self.round_number - 1).current_pool,
+        )
+
+    def js_vars(self):  # Result クラスの同名の関数とは微妙に違うので注意
+        ## 配列の作成に必要な定数をローカルに作成
+        num_rounds = self.round_number  # 現在のラウンド数
+        players = self.group.get_players()  # すべてのプレイヤーのリスト
+        # num_players = Constants.players_per_group   # プレイヤーの人数
+
+        ## resource を出力する List を作成（形式は List_exploitation と同じ）
+        List_resource = []
+        for p in players:  # リストに含まれるプレイヤーについて
+            id = p.id_in_group  # id を取得
+            pname = 'Player' + str(id)  # プレイヤー名の文字列
+            pdata = []  # データ格納用のリスト
+            for j in range(num_rounds - 1):  # 1ラウンド目から直前のラウンドまでについて
+                pdata.append(p.in_round(j + 1).resource)  # pdata リストに値を追加
+            pdict = {'name': pname, 'data': pdata}  # プレイヤー毎のリストを作成
+            List_resource.append(pdict)
+
+        ## current_pool を出力する List を作成（形式は total_exploitation と同じ）
+        pname = 'current_pool'  # プレイヤー名の文字列
+        pdata = []  # データ格納用のリスト
+        #        pdata.append(self.session.config['pool_start'])
+        for j in range(num_rounds - 1):  # 1ラウンド目から直前のラウンドまでについて
+            pdata.append(self.group.in_round(j + 1).current_pool)  # pdata リストに値を追加
+        List_current_pool = [{'name': pname, 'data': pdata}]  # プレイヤー毎のリストを作成
+
+        print('List_resource is', List_resource)  # デバッグ用
+        print('List_current_pool is', List_current_pool)  # デバッグ用
+
+        return dict(
+            num_rounds=self.session.config['num_rounds'],
+            List_resource=List_resource,
+        )
+"""
+
+class ResultsWaitPage2(WaitPage):
     after_all_players_arrive = 'resource_update'
 
 
@@ -239,12 +341,9 @@ class GameOver2(Page):
 page_sequence = [
     Introduction,
     ResultsWaitPage1,
-    Chatroom,
-    ResultsWaitPage2,
     Exploit1,
-    ResultsWaitPage3,
     Exploit2,
-    ResultsWaitPage3,
+    ResultsWaitPage2,
     GameOver1,
     GameOver2
 ]

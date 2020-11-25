@@ -10,11 +10,25 @@
 
 {% block content %}
 
-    ここではプレーヤー同士でコミュニケーションをとることができます。
+    ここではプレーヤー同士でコミュニケーションをとることができます。<br>
 
     プレーヤー同士で資源再生について協力するのかどうかを相談してください。
 
-    {% chat %}
+    {% chat nickname=nickname %}
+
+    <style>
+        .otree-chat__messages {
+            height: 400px;
+        }
+        .otree-chat__nickname {
+            color: #0000CD;
+            font-weight: bold;
+        }
+        .otree-chat__btn-send{
+            color: #00FFFF;
+            font-weight: bold;
+        }
+    </style>
 
     {% next_button %}
 

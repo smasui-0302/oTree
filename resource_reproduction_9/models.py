@@ -20,6 +20,7 @@ Resource reproduction game
 class Constants(BaseConstants):
     name_in_url = 'resource_reproduction_9'
     players_per_group = None
+    #players_per_group = 4
     num_rounds = 100
     pool_start = 500
     max_exploitation = 5
@@ -132,6 +133,9 @@ class Player(BasePlayer):
     resource = models.IntegerField(
         initial = 0
     )
+    #チャットルームにおけるプレイヤーのニックネームを返す関数
+    def chat_nickname(self):
+        return 'player {}'.format(self.id_in_group)
 
 def custom_export(players):
     # header row
